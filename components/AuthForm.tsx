@@ -10,6 +10,7 @@ import { Form } from "@/components/ui/form"; // ✅
 
 import { toast } from "sonner";
 import FormField from "./FormField";
+import { useRouter } from "next/navigation";
 const authFormSchema = (type:FormType)=>{
   return z.object({
     name: type==='sign-up' ? z.string().min(3) : z.string().optional(),
@@ -20,6 +21,7 @@ const authFormSchema = (type:FormType)=>{
 }
 
 const AuthForm = ({ type }: { type: FormType }) => {
+  const router = useRouter()
   const formSchema=authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,8 +36,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     try{
       if(type==='sign-up'){
+        toast.success("Account created successfully. Please sign in.");
+        router.push("/signin")
         console.log('SIGN UP',values);
       }else{
+        toast.success("sign in successfully");
+        router.push("/")
         console.log('SIGN IN',values);
       }
     }catch(error){
@@ -51,7 +57,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
         <div className="flex flex-col gap-6 card py-14 px-10">
           <div className="flex flex-row gap-2 justify-center ">
             <Image src={"/logo.svg"} alt="logo" height={32} width={38} />
-            <h2 className="text-primary-100">Preview</h2>
+            <h2 className="text-primary-100">PrepWise</h2>
           </div>
           <h3>Practice Job interview with AI</h3>
 
@@ -84,13 +90,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
             />
 
              
-              <div className="flex  justify-center bggree"><Button className="btn" type="submit">
+              <div className="flex  justify-center "><Button className="btn  w-full bg-primary-200 hover:bg-orange-300 hover:scale-105" type="submit">
                 {isSignIn ? "Sign In" : "Create an Account"}
               </Button></div>
               
             </form>
           </Form>
-          <p className="font-bold text-user-primary ml-1">
+          <p className="font-bold text-user-primary ml-1 flex items-center justify-center">
             {isSignIn ? "No account yet?  " : "Already Have an account? "}
             <Link href={!isSignIn ? "/signin" : "/signup"}>
               {!isSignIn ? "signIn" : "signUp"}
