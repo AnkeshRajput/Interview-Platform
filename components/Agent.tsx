@@ -11,7 +11,7 @@ enum CallStatus {
 
 const Agent = ({userName}: AgentProps) => {
   const callStatus = CallStatus.INACTIVE; 
-  const isSpeaking = true;
+  const isSpeaking = false;
   const messages = ['What is your name?', 'What is your experience with React?'];
   const lastMessage = messages[messages.length - 1];
   return (
